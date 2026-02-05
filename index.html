@@ -2,599 +2,226 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Ryana Zhea ❤️</title>
+<title>For Ryana Zhea</title>
 
-<!-- Libraries -->
 <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
 <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap');
 
 html, body {
-  margin: 0; padding: 0;
-  width: 100%; height: 100%;
+  margin: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background: radial-gradient(ellipse at center, #2d0a3d 0%, #0c001a 70%);
-  color: #ffe4f0;
+  background: radial-gradient(circle at center, #2d0a3d 0%, #0c001a 70%);
   font-family: "Dancing Script", cursive;
   cursor: none;
 }
 
-canvas { 
-  position: absolute; 
-  top: 0; 
-  left: 0;
+canvas {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
 }
 
-/* Custom cursor */
+/* cursor */
 .cursor {
   position: fixed;
   width: 20px;
   height: 20px;
   background: radial-gradient(circle, #ff69a8, #ff3c7f);
   border-radius: 50%;
+  transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 20px #ff69a8;
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
-}
-
-/* UI containers */
+/* screens */
 .screen {
   position: absolute;
   inset: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   text-align: center;
-  pointer-events: none;
   z-index: 100;
+  pointer-events: none;
 }
 
-.hidden { 
-  opacity: 0; 
-  visibility: hidden; 
+.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
+/* buttons */
 button {
   pointer-events: auto;
-  background: linear-gradient(45deg, transparent, rgba(255, 60, 127, 0.2));
+  background: transparent;
   border: 3px solid #ff3c7f;
   color: #ff8abf;
-  padding: 25px 50px;
+  padding: 24px 50px;
   font-size: 28px;
-  font-family: "Dancing Script", cursive;
-  font-weight: 600;
-  cursor: none;
-  transition: all 0.4s ease;
   border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 10px 30px rgba(255, 60, 127, 0.3);
-  position: relative;
-  overflow: hidden;
+  cursor: none;
+  transition: .3s;
 }
-
-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
-  transition: all 0.6s ease;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-}
-
-button:hover::before {
-  width: 200%;
-  height: 200%;
-}
-
 button:hover {
-  background: linear-gradient(45deg, #ff3c7f, #ff69a8);
+  background: #ff3c7f;
   color: #12020e;
-  transform: scale(1.1) rotate(2deg);
-  box-shadow: 0 20px 40px rgba(255, 60, 127, 0.6);
+  transform: scale(1.1);
 }
 
-/* Heart styling */
-.heartContainer {
-  position: relative;
-  display: inline-block;
-  margin: 20px;
+/* heart */
+.heartContainer,
+.heartSVG,
+#heartSVG,
+#heartShape {
+  pointer-events: auto;
 }
 
 .heartSVG {
-  width: 250px;
-  height: 250px;
-  filter: drop-shadow(0 10px 30px rgba(255, 60, 127, 0.5));
-  transition: all 0.3s ease;
+  width: 260px;
+  filter: drop-shadow(0 0 30px rgba(255,60,127,.6));
 }
 
 .clickCounter {
-  position: absolute;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  font-weight: 700;
-  color: #ff69a8;
-  text-shadow: 0 0 10px #ff69a8;
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #ff8abf;
 }
 
-.eye { 
-  fill: #fff; 
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-}
+.eye { fill: #fff; }
+.pupil { fill: #000; }
 
-.pupil { 
-  fill: #000; 
-  transition: all 0.15s ease;
-}
-
-/* Title styling */
+/* text */
 h1 {
   font-size: 3.5rem;
-  font-weight: 700;
-  margin: 30px 0;
-  text-shadow: 0 0 20px rgba(255, 105, 168, 0.8);
-  background: linear-gradient(45deg, #ff69a8, #ff3c7f, #fff);
-  background-clip: text;
+  background: linear-gradient(45deg,#ff69a8,#ff3c7f,#fff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: titleGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlow {
-  from { text-shadow: 0 0 20px rgba(255, 105, 168, 0.8); }
-  to { text-shadow: 0 0 40px rgba(255, 105, 168, 1); }
-}
-
-/* Final screen */
-.finalMessage {
-  font-size: 2.5rem;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.4;
-  text-shadow: 0 0 20px rgba(255, 105, 168, 0.8);
-}
-
-/* Floating hearts */
-.floatingHeart {
-  position: absolute;
-  font-size: 30px;
-  animation: floatUp 4s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes floatUp {
-  0% {
-    opacity: 1;
-    transform: translateY(100vh) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-100px) rotate(360deg);
-  }
-}
-
-/* Explosion particles */
-.particle {
-  position: absolute;
-  pointer-events: none;
-  font-size: 25px;
-}
-
-.flower-particle {
-  animation: explode 2s ease-out forwards;
-}
-
-@keyframes explode {
-  0% {
-    transform: scale(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(720deg) translate(var(--dx), var(--dy));
-    opacity: 0;
-  }
 }
 </style>
 </head>
 
 <body>
-<!-- Custom cursor -->
-<div class="cursor"></div>
 
-<!-- WebGL Canvas -->
+<div class="cursor"></div>
 <canvas id="glCanvas"></canvas>
 
-<!-- Intro Screen -->
+<!-- INTRO -->
 <div class="screen" id="introScreen">
-  <h1 style="font-size: 4rem; margin-bottom: 50px;">💕 A Special Invitation for Miss Ryana Zhea 💕</h1>
-  <button id="startBtn">✨ Click to Begin ✨</button>
+  <h1>A Special Invitation for Ryana Zhea</h1>
+  <button id="startBtn">Click to Begin</button>
 </div>
 
-<!-- Heart Screen -->
+<!-- HEART -->
 <div class="screen hidden" id="heartScreen">
   <div class="heartContainer">
-    <div class="clickCounter" id="clickCounter">Click the heart! (0/10)</div>
+    <div class="clickCounter" id="clickCounter">Click the heart (0/10)</div>
+
     <svg class="heartSVG" id="heartSVG" viewBox="0 0 512 512">
-      <defs>
-        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#ff1744;stop-opacity:1" />
-          <stop offset="50%" style="stop-color:#c8003a;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#8e0000;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <path id="heartShape" fill="url(#heartGradient)" style="cursor: none;"
-        d="M256 472s216-135.7 216-295.8S353.8 56 256 160 40 103 40 176.2 256 472 256 472z"/>
-      <circle class="eye" cx="200" cy="200" r="25"/>
-      <circle class="eye" cx="312" cy="200" r="25"/>
-      <circle class="pupil" id="p1" cx="200" cy="200" r="12"/>
-      <circle class="pupil" id="p2" cx="312" cy="200" r="12"/>
-      <!-- Blush -->
-      <ellipse fill="rgba(255, 182, 193, 0.6)" cx="160" cy="240" rx="20" ry="12"/>
-      <ellipse fill="rgba(255, 182, 193, 0.6)" cx="352" cy="240" rx="20" ry="12"/>
+      <path id="heartShape"
+        d="M256 472s216-135.7 216-295.8S353.8 56 256 160 40 103 40 176.2 256 472 256 472z"
+        fill="#c8003a"/>
+
+      <circle class="eye" cx="200" cy="200" r="22"/>
+      <circle class="eye" cx="312" cy="200" r="22"/>
+      <circle class="pupil" id="p1" cx="200" cy="200" r="10"/>
+      <circle class="pupil" id="p2" cx="312" cy="200" r="10"/>
     </svg>
   </div>
-  <h1 id="questionText">Will you be my Valentine's date?</h1>
-  <button id="yesBtn" class="hidden">💖 YES, OF COURSE! 💖</button>
+
+  <h1 id="questionText">Will you be my Valentine’s date?</h1>
+  <button id="yesBtn" class="hidden">YES</button>
 </div>
 
-<!-- Final Screen -->
+<!-- FINAL -->
 <div class="screen hidden" id="finalScreen">
-  <div class="finalMessage">
-    🌸 Yay! You're amazing! 🌸<br>
-    💕 Can't wait for our date! 💕<br>
-    <small style="font-size: 1.8rem; opacity: 0.8;">✨ With all my love ✨</small>
-  </div>
+  <h1>Thank you for choosing me, Ryana Zhea</h1>
 </div>
 
 <script>
-// Custom cursor movement
-const cursor = document.querySelector('.cursor');
-document.addEventListener('mousemove', (e) => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
+// cursor
+const cursor = document.querySelector(".cursor");
+document.addEventListener("mousemove", e => {
+  cursor.style.left = e.clientX + "px";
+  cursor.style.top = e.clientY + "px";
 });
 
-// THREE.JS SCENE
-const canvas = document.getElementById("glCanvas");
+// THREE background
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 1000);
 camera.position.z = 8;
 
-const renderer = new THREE.WebGLRenderer({antialias: true, canvas, alpha: true});
+const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, alpha: true });
 renderer.setSize(innerWidth, innerHeight);
 
-// Enhanced floating particles
-const createParticleSystem = (count, color, size) => {
-  const pts = new THREE.BufferGeometry();
-  const positions = new Float32Array(count * 3);
-  const velocities = new Float32Array(count * 3);
-  
-  for(let i = 0; i < count * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 30;
-    positions[i + 1] = (Math.random() - 0.5) * 30;
-    positions[i + 2] = (Math.random() - 0.5) * 30;
-    
-    velocities[i] = (Math.random() - 0.5) * 0.02;
-    velocities[i + 1] = (Math.random() - 0.5) * 0.02;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.02;
-  }
-  
-  pts.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  pts.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
-  
-  const mat = new THREE.PointsMaterial({
-    color: color,
-    size: size,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
-  });
-  
-  return new THREE.Points(pts, mat);
-};
+const geo = new THREE.BufferGeometry();
+const count = 800;
+const pos = new Float32Array(count * 3);
+for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - .5) * 30;
+geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+const mat = new THREE.PointsMaterial({ color: 0xff69a8, size: .07 });
+const pts = new THREE.Points(geo, mat);
+scene.add(pts);
 
-const particles1 = createParticleSystem(800, 0xff69a8, 0.08);
-const particles2 = createParticleSystem(600, 0xff3c7f, 0.06);
-const particles3 = createParticleSystem(400, 0xffc0cb, 0.04);
-
-scene.add(particles1);
-scene.add(particles2);
-scene.add(particles3);
-
-// Animation loop
 function animate() {
   requestAnimationFrame(animate);
-  
-  particles1.rotation.y += 0.0008;
-  particles1.rotation.x += 0.0003;
-  particles2.rotation.y -= 0.0006;
-  particles2.rotation.z += 0.0002;
-  particles3.rotation.x += 0.001;
-  particles3.rotation.z -= 0.0004;
-  
+  pts.rotation.y += .0008;
   renderer.render(scene, camera);
 }
 animate();
 
-// UI Elements
-const introScreen = document.getElementById("introScreen");
-const heartScreen = document.getElementById("heartScreen");
-const finalScreen = document.getElementById("finalScreen");
+// UI logic
+const intro = introScreen;
+const heart = heartScreen;
+const final = finalScreen;
 const startBtn = document.getElementById("startBtn");
 const yesBtn = document.getElementById("yesBtn");
 const heartSVG = document.getElementById("heartSVG");
-const heartShape = document.getElementById("heartShape");
-const clickCounter = document.getElementById("clickCounter");
-const questionText = document.getElementById("questionText");
+const counter = document.getElementById("clickCounter");
 
-// Heart click system
-let clickCount = 0;
-const maxClicks = 10;
-let heartClicked = false;
+let clicks = 0;
 
-// Start button animation
 startBtn.onclick = () => {
-  gsap.to(introScreen, {autoAlpha: 0, duration: 1.5, ease: "power2.inOut"});
-  gsap.to([particles1.rotation, particles2.rotation, particles3.rotation], {
-    y: "+=6.28", 
-    duration: 3, 
-    ease: "power2.inOut",
-    stagger: 0.2
-  });
-  
-  setTimeout(() => {
-    heartScreen.classList.remove("hidden");
-    gsap.from(".heartContainer", {
-      scale: 0, 
-      rotation: 360,
-      transformOrigin: "center center", 
-      duration: 2, 
-      ease: "elastic.out(1, 0.6)"
-    });
-    gsap.from("h1", {
-      y: 50,
-      opacity: 0,
-      duration: 1.5,
-      ease: "power2.out",
-      delay: 0.5
-    });
-  }, 1500);
+  gsap.to(intro, { autoAlpha: 0, duration: 1 });
+  setTimeout(() => heart.classList.remove("hidden"), 1000);
 };
 
-// Heart click handler
 heartSVG.onclick = () => {
-  if (heartClicked) return;
-  
-  clickCount++;
-  clickCounter.textContent = `Click the heart! (${clickCount}/${maxClicks})`;
-  
-  // Heart bounce effect
-  gsap.to(heartSVG, {
-    scale: 1.15,
-    duration: 0.15,
-    yoyo: true,
-    repeat: 1,
-    ease: "power2.out"
-  });
-  
-  // Change heart color gradually
-  const hue = 340 - (clickCount * 10);
-  heartShape.style.fill = `hsl(${hue}, 80%, 50%)`;
-  
-  // Shake effect as we get closer
-  if (clickCount > 7) {
-    gsap.to(".heartContainer", {
-      x: `random(-10, 10)`,
-      y: `random(-10, 10)`,
-      duration: 0.1,
-      repeat: 5,
-      yoyo: true,
-      ease: "power2.out"
-    });
-  }
-  
-  // Heart explosion!
-  if (clickCount >= maxClicks) {
-    heartClicked = true;
-    explodeHeart();
+  clicks++;
+  counter.textContent = `Click the heart (${clicks}/10)`;
+  gsap.fromTo(heartSVG,{scale:1},{scale:1.15,yoyo:true,repeat:1,duration:.15});
+
+  if (clicks >= 10) {
+    gsap.to(heartSVG,{scale:0,rotation:360,duration:1});
+    setTimeout(()=> yesBtn.classList.remove("hidden"), 800);
   }
 };
 
-// Heart explosion function
-function explodeHeart() {
-  // Hide the counter
-  gsap.to(clickCounter, {opacity: 0, duration: 0.5});
-  
-  // Heart explosion animation
-  gsap.to(heartSVG, {
-    scale: 1.5,
-    rotation: 360,
-    duration: 0.8,
-    ease: "power2.out"
-  });
-  
-  setTimeout(() => {
-    // Create explosion particles
-    createExplosion();
-    
-    // Hide heart
-    gsap.to(".heartContainer", {
-      scale: 0,
-      rotation: 720,
-      duration: 1,
-      ease: "power2.in"
-    });
-    
-    // Change question text
-    questionText.innerHTML = "💥 WOW! You did it! 💥<br>Now... will you be my Valentine? 💕";
-    
-    // Show YES button
-    setTimeout(() => {
-      yesBtn.classList.remove("hidden");
-      gsap.from(yesBtn, {
-        scale: 0,
-        rotation: 360,
-        duration: 1.5,
-        ease: "elastic.out(1, 0.8)"
-      });
-    }, 1000);
-    
-  }, 800);
-}
-
-// Explosion particle creation
-function createExplosion() {
-  const flowers = ['🌸', '🌺', '💐', '🌹', '🌻', '🌷', '🌼', '🌵', '🌿', '🍀'];
-  const hearts = ['💖', '💕', '💗', '💓', '💝', '❤️', '🧡', '💛', '💚', '💙', '💜'];
-  const particles = [...flowers, ...hearts];
-  
-  const heartRect = heartSVG.getBoundingClientRect();
-  const centerX = heartRect.left + heartRect.width / 2;
-  const centerY = heartRect.top + heartRect.height / 2;
-  
-  for (let i = 0; i < 50; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle flower-particle';
-    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-    particle.style.left = centerX + 'px';
-    particle.style.top = centerY + 'px';
-    
-    const angle = (Math.PI * 2 * i) / 50;
-    const distance = 200 + Math.random() * 300;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
-    
-    particle.style.setProperty('--dx', dx + 'px');
-    particle.style.setProperty('--dy', dy + 'px');
-    
-    document.body.appendChild(particle);
-    
-    setTimeout(() => {
-      particle.remove();
-    }, 2000);
-  }
-}
-
-// YES button handler
 yesBtn.onclick = () => {
-  // Create celebration
-  createFloatingHearts();
-  
-  // Transition to final screen
-  gsap.to(heartScreen, {
-    autoAlpha: 0,
-    scale: 0.8,
-    duration: 1.5,
-    ease: "power2.inOut"
-  });
-  
-  setTimeout(() => {
-    finalScreen.classList.remove("hidden");
-    gsap.from(".finalMessage", {
-      scale: 0,
-      y: 100,
-      duration: 2,
-      ease: "elastic.out(1, 0.6)"
-    });
-    
-    // Particle celebration
-    gsap.to([particles1.rotation, particles2.rotation, particles3.rotation], {
-      y: "+=12.56",
-      duration: 5,
-      ease: "power2.out"
-    });
-  }, 1500);
+  gsap.to(heart,{autoAlpha:0,duration:1});
+  setTimeout(()=> final.classList.remove("hidden"), 1000);
 };
 
-// Floating hearts creation
-function createFloatingHearts() {
-  const hearts = ['💕', '💖', '💗', '💓', '💝'];
-  
-  for (let i = 0; i < 20; i++) {
-    setTimeout(() => {
-      const heart = document.createElement('div');
-      heart.className = 'floatingHeart';
-      heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDelay = Math.random() * 2 + 's';
-      heart.style.animationDuration = (3 + Math.random() * 2) + 's';
-      
-      document.body.appendChild(heart);
-      
-      setTimeout(() => {
-        heart.remove();
-      }, 6000);
-    }, i * 100);
-  }
-}
-
-// Enhanced cursor following pupils
+// eyes
 document.addEventListener("mousemove", e => {
-  const eyes = [document.getElementById("p1"), document.getElementById("p2")];
-  eyes.forEach((pupil, i) => {
-    const eye = pupil.parentElement.querySelector('.eye');
-    const eyeRect = eye.getBoundingClientRect();
-    const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-    const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-    
-    const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
-    const distance = Math.min(8, Math.sqrt(
-      Math.pow(e.clientX - eyeCenterX, 2) + Math.pow(e.clientY - eyeCenterY, 2)
-    ) / 20);
-    
-    const pupilX = (i === 0 ? 200 : 312) + Math.cos(angle) * distance;
-    const pupilY = 200 + Math.sin(angle) * distance;
-    
-    gsap.to(pupil, {
-      attr: { cx: pupilX, cy: pupilY },
-      duration: 0.15,
-      ease: "power2.out"
-    });
+  [[p1,200],[p2,312]].forEach(([p,x])=>{
+    const dx = (e.clientX - innerWidth/2)/80;
+    const dy = (e.clientY - innerHeight/2)/80;
+    p.setAttribute("cx", x + dx);
+    p.setAttribute("cy", 200 + dy);
   });
 });
 
-// Window resize handler
-window.onresize = () => {
-  camera.aspect = innerWidth / innerHeight;
+onresize = () => {
+  camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
 };
-
-// Add some ambient floating hearts
-setInterval(() => {
-  if (Math.random() < 0.3) {
-    const heart = document.createElement('div');
-    heart.className = 'floatingHeart';
-    heart.textContent = '💕';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.fontSize = (15 + Math.random() * 15) + 'px';
-    heart.style.animationDuration = (4 + Math.random() * 3) + 's';
-    
-    document.body.appendChild(heart);
-    
-    setTimeout(() => {
-      heart.remove();
-    }, 7000);
-  }
-}, 2000);
 </script>
 
 </body>
