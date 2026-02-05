@@ -1,9 +1,212 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My Vercel Site</title>
-  </head>
-  <body>
-    <h1>It works 🎉</h1>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>For Ryana Zhea 💖</title>
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #ffd6e8, #ff9acb);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  .active { display: flex; }
+
+  button {
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    border-radius: 30px;
+    background: #ff4f8b;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform .2s;
+  }
+  button:hover { transform: scale(1.1); }
+
+  /* Flower */
+  .flower {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    animation: float 3s ease-in-out infinite;
+  }
+  .petal {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #ff69b4;
+    border-radius: 50%;
+  }
+  .petal:nth-child(1){ top:0; left:30px;}
+  .petal:nth-child(2){ top:30px; left:0;}
+  .petal:nth-child(3){ top:30px; right:0;}
+  .petal:nth-child(4){ bottom:0; left:30px;}
+  .center {
+    position:absolute;
+    top:35px; left:35px;
+    width:50px; height:50px;
+    background:#ffd700;
+    border-radius:50%;
+  }
+  @keyframes float {
+    0%,100%{ transform: translateY(0);}
+    50%{ transform: translateY(-15px);}
+  }
+
+  /* Heart with eyes */
+  .heart {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: red;
+    transform: rotate(-45deg);
+    margin-bottom: 30px;
+  }
+  .heart::before,
+  .heart::after {
+    content:'';
+    position:absolute;
+    width:120px;
+    height:120px;
+    background:red;
+    border-radius:50%;
+  }
+  .heart::before { top:-60px; left:0;}
+  .heart::after { left:60px; top:0;}
+
+  .eyes {
+    position:absolute;
+    top:45px;
+    left:25px;
+    display:flex;
+    gap:20px;
+    transform: rotate(45deg);
+  }
+  .eye {
+    width:20px;
+    height:20px;
+    background:white;
+    border-radius:50%;
+    position:relative;
+    overflow:hidden;
+  }
+  .pupil {
+    width:8px;
+    height:8px;
+    background:black;
+    border-radius:50%;
+    position:absolute;
+    top:6px;
+    left:6px;
+  }
+
+  /* Book */
+  .book {
+    width: 280px;
+    height: 200px;
+    background: #fff5f8;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    animation: openBook 1.2s ease forwards;
+  }
+  @keyframes openBook {
+    from { transform: scaleX(0.1); opacity:0; }
+    to { transform: scaleX(1); opacity:1; }
+  }
+
+  h1, h2, p { color: #b0004f; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <button onclick="goTo(2)">CLICK me</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <div class="flower">
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="center"></div>
+  </div>
+  <br>
+  <button onclick="goTo(3)">Next 💕</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <div class="heart">
+    <div class="eyes">
+      <div class="eye"><div class="pupil"></div></div>
+      <div class="eye"><div class="pupil"></div></div>
+    </div>
+  </div>
+  <h2>Ryana Zhea 💖</h2>
+  <h1>Will you be my Valentine’s date?</h1>
+  <button onclick="goTo(4)">Yes</button>
+  <br><br>
+  <button onclick="goTo(4)">Yes</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+  <div class="book">
+    <p>
+      Thank you for choosing me to be your Valentine’s date 💕<br><br>
+      I wish you are free on Feb 14, if not we can celebrate anytime around February.
+      The most important thing is I love you, Ryana Zhea,
+      and you will always be my love 💖
+    </p>
+  </div>
+  <br>
+  <button onclick="goTo(5)">One last thing 🌸</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+  <div class="flower"></div>
+  <h1>💐❤️💐</h1>
+</div>
+
+<script>
+function goTo(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+
+document.addEventListener('mousemove', e => {
+  document.querySelectorAll('.pupil').forEach(p => {
+    const rect = p.parentElement.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * 6;
+    const y = (e.clientY - rect.top) / rect.height * 6;
+    p.style.transform = `translate(${x}px, ${y}px)`;
+  });
+});
+</script>
+
+</body>
 </html>
