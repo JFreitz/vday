@@ -1,211 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>For Ryana Zhea 💖</title>
+<meta charset="UTF-8">
+<title>For Ryana Zhea</title>
+
+<!-- Libraries -->
+<script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-  }
-  body {
-    margin: 0;
-    background: radial-gradient(circle at top, #ffd6e8, #ff9acb);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .page {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-  }
-  .active { display: flex; }
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#0b0614;
+  font-family: "Georgia", serif;
+}
+canvas{
+  position:fixed;
+  top:0;left:0;
+}
 
-  button {
-    padding: 15px 30px;
-    font-size: 20px;
-    border: none;
-    border-radius: 30px;
-    background: #ff4f8b;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    transition: transform .2s;
-  }
-  button:hover { transform: scale(1.1); }
+/* UI layers */
+.ui{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.panel{
+  text-align:center;
+  color:#ffd7e8;
+  pointer-events:auto;
+}
+button{
+  background:transparent;
+  border:2px solid #ff4d88;
+  color:#ffb3cf;
+  padding:18px 36px;
+  font-size:20px;
+  cursor:pointer;
+  letter-spacing:2px;
+  transition:.3s;
+}
+button:hover{
+  background:#ff4d88;
+  color:#12040c;
+  transform:scale(1.1);
+}
 
-  /* Flower */
-  .flower {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    animation: float 3s ease-in-out infinite;
-  }
-  .petal {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: #ff69b4;
-    border-radius: 50%;
-  }
-  .petal:nth-child(1){ top:0; left:30px;}
-  .petal:nth-child(2){ top:30px; left:0;}
-  .petal:nth-child(3){ top:30px; right:0;}
-  .petal:nth-child(4){ bottom:0; left:30px;}
-  .center {
-    position:absolute;
-    top:35px; left:35px;
-    width:50px; height:50px;
-    background:#ffd700;
-    border-radius:50%;
-  }
-  @keyframes float {
-    0%,100%{ transform: translateY(0);}
-    50%{ transform: translateY(-15px);}
-  }
+/* Heart scene */
+.heart3d{
+  position:relative;
+  width:160px;
+  height:160px;
+  transform-style:preserve-3d;
+}
+.heart3d::before,
+.heart3d::after{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  background:#c4003a;
+  border-radius:50%;
+}
+.heart3d::before{ left:80px; }
+.heart3d::after{ top:-80px; }
+.core{
+  width:160px;
+  height:160px;
+  background:#c4003a;
+  transform:rotate(-45deg);
+}
+.eye{
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:#fff;
+  border-radius:50%;
+  top:65px;
+}
+.eye.left{ left:50px; }
+.eye.right{ left:90px; }
+.pupil{
+  width:8px;
+  height:8px;
+  background:#000;
+  border-radius:50%;
+  position:absolute;
+  top:6px;left:6px;
+}
 
-  /* Heart with eyes */
-  .heart {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    background: red;
-    transform: rotate(-45deg);
-    margin-bottom: 30px;
-  }
-  .heart::before,
-  .heart::after {
-    content:'';
-    position:absolute;
-    width:120px;
-    height:120px;
-    background:red;
-    border-radius:50%;
-  }
-  .heart::before { top:-60px; left:0;}
-  .heart::after { left:60px; top:0;}
-
-  .eyes {
-    position:absolute;
-    top:45px;
-    left:25px;
-    display:flex;
-    gap:20px;
-    transform: rotate(45deg);
-  }
-  .eye {
-    width:20px;
-    height:20px;
-    background:white;
-    border-radius:50%;
-    position:relative;
-    overflow:hidden;
-  }
-  .pupil {
-    width:8px;
-    height:8px;
-    background:black;
-    border-radius:50%;
-    position:absolute;
-    top:6px;
-    left:6px;
-  }
-
-  /* Book */
-  .book {
-    width: 280px;
-    height: 200px;
-    background: #fff5f8;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    animation: openBook 1.2s ease forwards;
-  }
-  @keyframes openBook {
-    from { transform: scaleX(0.1); opacity:0; }
-    to { transform: scaleX(1); opacity:1; }
-  }
-
-  h1, h2, p { color: #b0004f; }
+/* Book */
+.book{
+  width:360px;
+  height:240px;
+  perspective:1200px;
+}
+.cover{
+  width:100%;
+  height:100%;
+  background:#2a0d18;
+  color:#f6d6e3;
+  padding:30px;
+  transform-origin:left;
+  transform:rotateY(-120deg);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+.page{
+  position:absolute;
+  inset:0;
+  background:#fffafc;
+  padding:30px;
+  color:#3b0015;
+  font-size:15px;
+  line-height:1.6;
+}
+.hidden{display:none;}
 </style>
 </head>
+
 <body>
 
-<!-- PAGE 1 -->
-<div class="page active" id="page1">
-  <button onclick="goTo(2)">CLICK me</button>
-</div>
-
-<!-- PAGE 2 -->
-<div class="page" id="page2">
-  <div class="flower">
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="center"></div>
+<div class="ui" id="ui1">
+  <div class="panel">
+    <button id="startBtn">CLICK ME</button>
   </div>
-  <br>
-  <button onclick="goTo(3)">Next 💕</button>
 </div>
 
-<!-- PAGE 3 -->
-<div class="page" id="page3">
-  <div class="heart">
-    <div class="eyes">
-      <div class="eye"><div class="pupil"></div></div>
-      <div class="eye"><div class="pupil"></div></div>
+<div class="ui hidden" id="ui2">
+  <div class="panel">
+    <button id="toHeart">ENTER</button>
+  </div>
+</div>
+
+<div class="ui hidden" id="ui3">
+  <div class="panel">
+    <div class="heart3d" id="heart">
+      <div class="core"></div>
+      <div class="eye left"><div class="pupil"></div></div>
+      <div class="eye right"><div class="pupil"></div></div>
     </div>
+    <h2>Ryana Zhea</h2>
+    <h1>Will you be my Valentine’s date?</h1>
+    <button id="yesBtn">YES</button><br><br>
+    <button id="yesBtn2">YES</button>
   </div>
-  <h2>Ryana Zhea 💖</h2>
-  <h1>Will you be my Valentine’s date?</h1>
-  <button onclick="goTo(4)">Yes</button>
-  <br><br>
-  <button onclick="goTo(4)">Yes</button>
 </div>
 
-<!-- PAGE 4 -->
-<div class="page" id="page4">
-  <div class="book">
-    <p>
-      Thank you for choosing me to be your Valentine’s date 💕<br><br>
-      I wish you are free on Feb 14, if not we can celebrate anytime around February.
-      The most important thing is I love you, Ryana Zhea,
-      and you will always be my love 💖
-    </p>
+<div class="ui hidden" id="ui4">
+  <div class="panel">
+    <div class="book">
+      <div class="page">
+        Thank you for choosing me to be your Valentine’s date.<br><br>
+        I wish you are free on February 14. If not, we can celebrate anytime around February.
+        The most important thing is that I love you, Ryana Zhea,
+        and you will always be my love.
+      </div>
+      <div class="cover">A Letter</div>
+    </div>
+    <br><br>
+    <button id="finalBtn">CONTINUE</button>
   </div>
-  <br>
-  <button onclick="goTo(5)">One last thing 🌸</button>
-</div>
-
-<!-- PAGE 5 -->
-<div class="page" id="page5">
-  <div class="flower"></div>
-  <h1>💐❤️💐</h1>
 </div>
 
 <script>
-function goTo(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-}
+/* THREE.JS SCENE */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,1000);
+camera.position.z = 6;
 
-document.addEventListener('mousemove', e => {
-  document.querySelectorAll('.pupil').forEach(p => {
-    const rect = p.parentElement.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width * 6;
-    const y = (e.clientY - rect.top) / rect.height * 6;
-    p.style.transform = `translate(${x}px, ${y}px)`;
+const renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+
+/* Light */
+scene.add(new THREE.AmbientLight(0xffb6d5,.8));
+const light = new THREE.PointLight(0xff4d88,1);
+light.position.set(5,5,5);
+scene.add(light);
+
+/* Procedural Flower */
+const petals=[];
+const petalGeo=new THREE.SphereGeometry(.4,32,32);
+const petalMat=new THREE.MeshStandardMaterial({color:0xff5fa2});
+for(let i=0;i<8;i++){
+  const p=new THREE.Mesh(petalGeo,petalMat);
+  const angle=i*Math.PI/4;
+  p.position.set(Math.cos(angle)*1.2,Math.sin(angle)*1.2,0);
+  petals.push(p);
+  scene.add(p);
+}
+const center=new THREE.Mesh(
+  new THREE.SphereGeometry(.5,32,32),
+  new THREE.MeshStandardMaterial({color:0xffd166})
+);
+scene.add(center);
+
+/* Animate */
+function animate(){
+  requestAnimationFrame(animate);
+  petals.forEach((p,i)=>{
+    p.rotation.z+=0.01;
+    p.position.z=Math.sin(Date.now()*0.002+i)*0.2;
+  });
+  center.rotation.y+=0.01;
+  renderer.render(scene,camera);
+}
+animate();
+
+/* UI Flow */
+const ui1=ui2=ui3=ui4=null;
+const $=id=>document.getElementById(id);
+
+$("startBtn").onclick=()=>{
+  $("ui1").classList.add("hidden");
+  $("ui2").classList.remove("hidden");
+};
+$("toHeart").onclick=()=>{
+  $("ui2").classList.add("hidden");
+  $("ui3").classList.remove("hidden");
+};
+$("yesBtn").onclick=$("yesBtn2").onclick=()=>{
+  $("ui3").classList.add("hidden");
+  $("ui4").classList.remove("hidden");
+  gsap.to(".cover",{rotateY:0,duration:1.5,ease:"power3.out"});
+};
+
+/* Eye tracking */
+document.addEventListener("mousemove",e=>{
+  document.querySelectorAll(".pupil").forEach(p=>{
+    const r=p.parentElement.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)/20;
+    const y=(e.clientY-r.top-r.height/2)/20;
+    p.style.transform=`translate(${x}px,${y}px)`;
   });
 });
+
+window.onresize=()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+};
 </script>
 
 </body>
